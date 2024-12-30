@@ -1,0 +1,32 @@
+name: pihole
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    hostname: pihole
+    restart: always
+    pull_policy: always
+    environment:
+      - DNSSEC=true
+      - TEMPERATUREUNIT=f
+      - WEBTHEME=default-dark
+      - WEBUIBOXEDLAYOUT=boxed
+      - TZ=${TZ:-America/New_York}
+      - PIHOLE_DOMAIN=${BASE_HOST_NAME:-$HOSTNAME}
+      - WEBPASSWORD=${APP_API_TOKEN:-jixOr1GBOpe82qCy}
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '172.17.0.1:59044:80/tcp'
+    volumes:
+      - '/var/lib/srv/$USER/docker/pihole/pihole/latest/rootfs/config/pihole:/etc/pihole'
+      - '/var/lib/srv/$USER/docker/pihole/pihole/latest/rootfs/config/dnsmasq:/etc/dnsmasq.d'
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - pihole
+
+networks:
+  pihole:
+    name: pihole
+    external: false

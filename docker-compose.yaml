@@ -33,8 +33,8 @@ services:
       - '53:53/udp'
       - '172.17.0.1:59044:80/tcp'
     volumes:
-      - '/var/lib/srv/$USER/docker/pihole/pihole/latest/rootfs/config/pihole:/etc/pihole'
-      - '/var/lib/srv/$USER/docker/pihole/pihole/latest/rootfs/config/dnsmasq:/etc/dnsmasq.d'
+      - '/var/lib/srv/$USER/docker/pihole/rootfs/config/pihole:/etc/pihole'
+      - '/var/lib/srv/$USER/docker/pihole/rootfs/config/dnsmasq:/etc/dnsmasq.d'
     cap_add:
       - SYS_TIME
       - SYS_NICE

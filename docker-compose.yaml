@@ -1,0 +1,48 @@
+# nginx proxy address - http://172.17.0.1:59044
+
+name: pihole
+x-logging: &default-logging
+  options:
+    max-size: '5m'
+    max-file: '1'
+  driver: json-file
+
+services:
+  app:
+    image: pihole/pihole:latest
+    container_name: pihole-app
+    hostname: ${BASE_HOST_NAME:-$HOSTNAME}
+    restart: always
+    pull_policy: always
+    logging: *default-logging
+    environment:
+      - DNSSEC=true
+      - TAIL_FTL_LOG=1
+      - TEMPERATUREUNIT=f
+      - WEBTHEME=default-dark
+      - WEBUIBOXEDLAYOUT=boxed
+      - TZ=${TZ:-America/New_York}
+      - FTLCONF_dns_listeningMode=all
+      - FTLCONF_misc_etc_dnsmasq_d=true
+      - PIHOLE_DOMAIN=${BASE_HOST_NAME:-$HOSTNAME}
+      - WEBPASSWORD=${APP_API_TOKEN:-jixOr1GBOpe82qCy}
+      - FTLCONF_webserver_api_password=${APP_API_TOKEN:-jixOr1GBOpe82qCy}
+      - FTLCONF_dns_upstreams=103.124.104.139;82.29.128.43;1.1.1.1;8.8.8.8
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '172.17.0.1:59044:80/tcp'
+    volumes:
+      - './rootfs/config/pihole:/etc/pihole'
+      - './rootfs/config/dnsmasq:/etc/dnsmasq.d'
+    cap_add:
+      - SYS_TIME
+      - SYS_NICE
+      - NET_ADMIN
+    networks:
+      - pihole
+
+networks:
+  pihole:
+    name: pihole
+    external: false

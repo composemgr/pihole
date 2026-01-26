@@ -1,27 +1,31 @@
 ## 👋 Welcome to pihole 🚀
 
-pihole - Self-hosted Docker Compose deployment
+Network-wide ad blocking via DNS sinkhole
 
 ## 📋 Description
 
-Pihole is a containerized service deployed using Docker Compose. This setup provides a complete, production-ready deployment with proper security defaults, logging, and configuration management.
+Network-wide ad blocking via DNS sinkhole
+
+## 🚀 Services
+
+- **app**: pihole/pihole:latest
 
 ## 📦 Installation
 
-### Using curl
-```shell
-curl -q -LSsf "https://raw.githubusercontent.com/composemgr/pihole/main/docker-compose.yaml" | docker compose -f - up -d
+### Option 1: Quick Install
+```bash
+curl -q -LSsf "https://raw.githubusercontent.com/composemgr/pihole/main/docker-compose.yaml" -o compose.yml
 ```
 
-### Using git
-```shell
+### Option 2: Git Clone
+```bash
 git clone "https://github.com/composemgr/pihole" ~/.local/srv/docker/pihole
 cd ~/.local/srv/docker/pihole
 docker compose up -d
 ```
 
-### Using composemgr
-```shell
+### Option 3: Using composemgr
+```bash
 composemgr install pihole
 ```
 
@@ -31,9 +35,11 @@ composemgr install pihole
 
 ```shell
 TZ=America/New_York
-BASE_HOST_NAME=${HOSTNAME}
-BASE_DOMAIN_NAME=
+APP_ADMIN_PASS=changeme_admin_password
+APP_ADMIN_PASS=changeme_admin_password
 ```
+
+See `docker-compose.yaml` for complete list of configurable options.
 
 ## 🌐 Access
 
@@ -41,43 +47,46 @@ BASE_DOMAIN_NAME=
 
 ## 📂 Volumes
 
-- `./rootfs/config/pihole` - Configuration files
-- `./rootfs/data/pihole` - Application data
+- `./rootfs/config/pihole` - Data storage
+- `./rootfs/config/dnsmasq` - Data storage
 
 ## 🔐 Security
 
-- Change default passwords after first login
-- Use HTTPS via reverse proxy in production
-- Configure authentication as needed
+- Change all default passwords before deploying to production
+- Use strong secrets for all authentication tokens
+- Configure HTTPS using a reverse proxy (nginx, traefik, caddy)
+- Regularly update Docker images for security patches
+- Backup your data regularly
 
 ## 🔍 Logging
 
 ```shell
-docker compose logs -f
+docker compose logs -f app
 ```
 
 ## 🛠️ Management
 
-### Start services
-```shell
+```bash
+# Start services
 docker compose up -d
-```
 
-### Stop services
-```shell
+# Stop services
 docker compose down
-```
 
-### Update images
-```shell
+# Update to latest images
 docker compose pull && docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Restart services
+docker compose restart
 ```
 
 ## 📋 Requirements
 
 - Docker Engine 20.10+
 - Docker Compose V2+
-- Sufficient disk space for data and logs
 
 ## 🤝 Author
 

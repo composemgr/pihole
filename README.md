@@ -47,8 +47,8 @@ See `docker-compose.yaml` for complete list of configurable options.
 
 ## 📂 Volumes
 
-- `./rootfs/config/pihole` - Data storage
-- `./rootfs/config/dnsmasq` - Data storage
+- `./volumes/config/pihole` - Data storage
+- `./volumes/config/dnsmasq` - Data storage
 
 ## 🔐 Security
 

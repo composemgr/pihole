@@ -25,7 +25,6 @@ services:
       FTLCONF_dns_listeningMode: all
       FTLCONF_misc_etc_dnsmasq_d: true
       PIHOLE_DOMAIN: ${BASE_HOST_NAME:-$HOSTNAME}
-      WEBPASSWORD: ${APP_ADMIN_PASS:-changeme_admin_password}
       FTLCONF_webserver_api_password: ${APP_ADMIN_PASS:-changeme_admin_password}
       FTLCONF_dns_upstreams: 103.124.104.139;82.29.128.43;1.1.1.1;8.8.8.8
       CONTAINER_NAME: pihole-app

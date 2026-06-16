@@ -42,30 +42,9 @@ services:
       - NET_ADMIN
     networks:
       - pihole
-      - proxy
-      - cloudflare
-    labels:
-      - 'traefik.enable=true'
-      - 'cloudflare.enable=true'
-      - 'traefik.docker.network=proxy'
-      - 'cloudflare.service=http://pihole-app:80'
-      - 'cloudflare.hostname=pihole.${CLOUDFLARE_ZONE_NAME:-}'
-      - 'traefik.http.routers.pihole-app.entrypoints=http'
-      - 'traefik.http.routers.pihole-app-secure.tls=true'
-      - 'traefik.http.routers.pihole-app.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
-      - 'traefik.http.middlewares.pihole-app-https-redirect.redirectscheme.scheme=https'
-      - 'traefik.http.routers.pihole-app.middlewares=pihole-app-https-redirect'
-      - 'traefik.http.routers.pihole-app-secure.entrypoints=https'
-      - 'traefik.http.routers.pihole-app-secure.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
-      - 'traefik.http.routers.pihole-app-secure.tls.certresolver=cloudflare'
-      - 'traefik.http.routers.pihole-app-secure.service=pihole-app'
-      - 'traefik.http.services.pihole-app.loadbalancer.server.port=80'
 
 networks:
   pihole:
     name: pihole
     external: false
-  proxy:
-    external: true
-  cloudflare:
-    external: true
+

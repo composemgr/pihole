@@ -1,0 +1,62 @@
+name: pihole
+x-logging: &default-logging
+  options:
+    max-size: '5m'
+    max-file: '1'
+  driver: json-file
+
+services:
+  app:
+    image: pihole/pihole:latest
+    container_name: pihole-app
+    hostname: ${BASE_HOST_NAME:-$HOSTNAME}
+    restart: always
+    pull_policy: always
+    logging: *default-logging
+    environment:
+      DNSSEC: true
+      TAIL_FTL_LOG: 1
+      TEMPERATUREUNIT: f
+      WEBTHEME: default-dark
+      WEBUIBOXEDLAYOUT: boxed
+      TZ: ${TZ:-America/New_York}
+      FTLCONF_dns_listeningMode: all
+      FTLCONF_misc_etc_dnsmasq_d: true
+      PIHOLE_DOMAIN: ${BASE_HOST_NAME:-$HOSTNAME}
+      FTLCONF_webserver_api_password: ${APP_ADMIN_PASS:-changeme_admin_password}
+      FTLCONF_dns_upstreams: 103.124.104.139;82.29.128.43;1.1.1.1;8.8.8.8
+      CONTAINER_NAME: pihole-app
+      HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
+    volumes:
+      - './volumes/config/pihole:/etc/pihole'
+      - './volumes/config/dnsmasq:/etc/dnsmasq.d'
+    cap_add:
+      - SYS_TIME
+      - SYS_NICE
+      - NET_ADMIN
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=traefik'
+      - 'traefik.http.routers.pihole.entrypoints=http'
+      - 'traefik.http.routers.pihole.rule=Host(`${BASE_HOST_NAME:-$HOSTNAME}`)'
+      - 'traefik.http.routers.pihole.middlewares=pihole-https-redirect'
+      - 'traefik.http.middlewares.pihole-https-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.routers.pihole-secure.entrypoints=https'
+      - 'traefik.http.routers.pihole-secure.tls=true'
+      - 'traefik.http.routers.pihole-secure.rule=Host(`${BASE_HOST_NAME:-$HOSTNAME}`)'
+      - 'traefik.http.routers.pihole-secure.tls.certresolver=cloudflare'
+      - 'traefik.http.routers.pihole-secure.service=pihole'
+      - 'traefik.http.services.pihole.loadbalancer.server.port=80'
+    networks:
+      - pihole
+      - traefik
+
+networks:
+  pihole:
+    name: pihole
+    external: false
+  traefik:
+    external: true

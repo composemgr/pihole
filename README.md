@@ -81,6 +81,8 @@ docker compose -f docker-compose.traefik.yaml --env-file .env up -d
 - **Web Interface**: http://172.17.0.1:64301
 - **DNS**: port 53 (tcp and udp) on all host interfaces, in every compose variant
 
+Non-HTTP protocol ports are published identically in all three compose variants, because they cannot be proxied over HTTP: `67/udp` (DHCP), in addition to DNS `53`.
+
 ## 📂 Volumes
 
 - `./volumes/config/pihole` - Data storage

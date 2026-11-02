@@ -40,6 +40,7 @@ services:
       - '172.17.0.1:64301:80'
       - '53:53/tcp'
       - '53:53/udp'
+      - '67:67/udp'
     networks:
       - pihole
 

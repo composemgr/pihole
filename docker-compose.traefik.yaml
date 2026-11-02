@@ -37,6 +37,7 @@ services:
     ports:
       - '53:53/tcp'
       - '53:53/udp'
+      - '67:67/udp'
     labels:
       - 'traefik.enable=true'
       - 'traefik.docker.network=traefik'

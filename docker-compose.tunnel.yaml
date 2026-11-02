@@ -37,6 +37,7 @@ services:
     ports:
       - '53:53/tcp'
       - '53:53/udp'
+      - '67:67/udp'
     labels:
       - 'cloudflare.enable=true'
       - 'cloudflare.service=http://pihole-app:80'
